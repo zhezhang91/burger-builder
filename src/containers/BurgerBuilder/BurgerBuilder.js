@@ -11,12 +11,16 @@ import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions';
 
 
-let INGREDIENTS_PRICES = null;
+let INGREDIENTS_PRICES = {
+    salad: 0.5,
+    cheese: 0.4,
+    meat: 1.3,
+    bacon: 0.7
+};
 
 class BurgerBuilder extends Component {
 
     state = {
-
         totalPrice: 4,
         purchaseable: false,
         purchasing: false,
@@ -36,14 +40,14 @@ class BurgerBuilder extends Component {
         //         this.setState({error: true})
         //     });
         //
-        // axios.get('https://react-zhe-burger.firebaseio.com/price.json')
-        //     .then(response => {
-        //         INGREDIENTS_PRICES= response.data;
-        //         console.log(response);
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true})
-        //     });
+        axios.get('https://react-zhe-burger.firebaseio.com/price.json')
+            .then(response => {
+                INGREDIENTS_PRICES= response.data;
+                console.log(response);
+            })
+            .catch(error => {
+                this.setState({error: true})
+            });
         //
         // axios.get('https://react-zhe-burger.firebaseio.com/totalprice.json')
         //     .then(response => {
@@ -143,8 +147,8 @@ class BurgerBuilder extends Component {
             <Aux>
                 <Burger ingredients={this.props.ings}/>
                 <BuildControls
-                    ingredientAdded={() => this.props.onIngredientAdded()}
-                    ingredientRemoved={() => this.props.onIngredientRemoved()}
+                    ingredientAdded={this.props.onIngredientAdded}
+                    ingredientRemoved={this.props.onIngredientRemoved}
                     disabled={disableInfo}
                     price={this.state.totalPrice}
                     purchaseable={this.state.purchaseable}
