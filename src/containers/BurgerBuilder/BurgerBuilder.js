@@ -11,7 +11,7 @@ import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
 
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
 
     state = {
         totalPrice: 4,
@@ -25,24 +25,6 @@ class BurgerBuilder extends Component {
         console.log(this.props);
         this.props.onInitIngredients();
 
-        //
-        // axios.get('https://react-zhe-burger.firebaseio.com/price.json')
-        //     .then(response => {
-        //         INGREDIENTS_PRICES= response.data;
-        //         console.log(response);
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true})
-        //     });
-        //
-        // axios.get('https://react-zhe-burger.firebaseio.com/totalprice.json')
-        //     .then(response => {
-        //         this.setState({totalPrice: response.data});
-        //         console.log(response);
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true})
-        //     });
     }
 
     updatePurchaseState = (ingredients) => {
@@ -53,43 +35,7 @@ class BurgerBuilder extends Component {
             },0);
         return sum > 0;
     };
-    //
-    // AddIngredientHandler = (type) => {
-    //     const oldCount = this.state.ingredients[type];
-    //     const updatedCount = oldCount + 1;
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     };
-    //     updatedIngredients[type] = updatedCount;
-    //     const priceAddition = INGREDIENTS_PRICES[type];
-    //     const oldPrice = this.state.totalPrice;
-    //     const newPrice = oldPrice + priceAddition;
-    //     this.setState({
-    //         ingredients: updatedIngredients,
-    //         totalPrice: newPrice,
-    //     });
-    //     this.updatePurchaseState(updatedIngredients);
-    // };
-    //
-    // RemoveIngredientHandler = (type) => {
-    //     const oldCount = this.state.ingredients[type];
-    //     if(oldCount <= 0) {
-    //         return;
-    //     }
-    //     const updatedCount = oldCount - 1;
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     };
-    //     updatedIngredients[type] = updatedCount;
-    //     const priceDeduction = INGREDIENTS_PRICES[type];
-    //     const oldPrice = this.state.totalPrice;
-    //     let newPrice = oldPrice - priceDeduction;
-    //     this.setState({
-    //         ingredients: updatedIngredients,
-    //         totalPrice: newPrice,
-    //     });
-    //     this.updatePurchaseState(updatedIngredients);
-    // };
+
 
     purchaseHandler =() => {
         this.setState({purchasing: true})
@@ -101,13 +47,7 @@ class BurgerBuilder extends Component {
 
     // pass the ingredients by query params, now using redux
     purchaseContinueHandler = () => {
-        // const queryParams = [];
-        //
-        // for (let i in this.state.ingredients) {
-        //     queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
-        // }
-        //
-        // queryParams.push('price=' + this.state.totalPrice);
+
         this.props.onInitPurchase();
         this.props.history.push('/checkout');
     };
