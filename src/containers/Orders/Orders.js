@@ -13,7 +13,6 @@ class Orders extends Component {
   };
 
   componentDidMount() {
-    console.log("@@@@@@@@", this.props.token);
     this.props.onFetchOrders(this.props.token, this.props.userId);
   }
 
