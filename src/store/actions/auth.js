@@ -1,8 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
 
-const APIKey = "AIzaSyBGPw3AGtZmEaTyy2GuTr5hjlHwlO_jDew";
-
 export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
@@ -63,7 +61,6 @@ export const auth = (email, password, isSignup) => {
     axios
       .post(url, authData)
       .then(res => {
-        console.log(res);
         const expireDate = new Date(
           new Date().getTime() + res.data.expiresIn * 1000
         );
@@ -74,7 +71,6 @@ export const auth = (email, password, isSignup) => {
         dispatch(checkAuthTimeout(res.data.expiresIn));
       })
       .catch(err => {
-        console.log(err.response.data.error);
         dispatch(authFailed(err.response.data.error));
       });
   };

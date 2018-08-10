@@ -7,6 +7,7 @@ import Input from "../../../components/UI/Input/Input";
 import { connect } from "react-redux";
 import withErrorHandler from "../../../hoc/WithErrorHandler/WithErrorHandler";
 import * as orderActions from "../../../store/actions/index";
+import { updateObject, checkValidity } from "../../../shared/utility";
 
 class ContactData extends Component {
   state = {
@@ -94,38 +95,17 @@ class ContactData extends Component {
     formIsValid: false
   };
 
-  checkValidity(value, rules) {
-    let isValid = true;
-
-    if (!rules) {
-      return true;
-    }
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    return isValid;
-  }
-
   orderHandler = event => {
     // do not want to reload page
     event.preventDefault();
-    // console.log(this.props.ingredients);
+
     const formData = {};
     for (let formElementId in this.state.orderForm) {
       formData[formElementId] = this.state.orderForm[formElementId].value;
     }
     const order = {
       ingredients: this.props.ings,
-      price: this.props.price,
+      price: this.props.pricecheckValidity,
       orderData: formData,
       userId: this.props.userId
     };
@@ -133,21 +113,18 @@ class ContactData extends Component {
   };
 
   inputChangedHandler = (event, inputID) => {
-    //console.log(event.target.value);
-    const updatedForm = {
-      ...this.state.orderForm
-    };
+    const updatedValue = updateObject(this.state.orderForm[inputID], {
+      value: event.target.value,
+      valid: checkValidity(
+        event.target.value,
+        this.state.orderForm[inputID].validation
+      ),
+      touched: true
+    });
 
-    const updatedValue = { ...updatedForm[inputID] };
-
-    updatedValue.value = event.target.value;
-    updatedValue.valid = this.checkValidity(
-      updatedValue.value,
-      updatedValue.validation
-    );
-    updatedValue.touched = true;
-    console.log(updatedValue);
-    updatedForm[inputID] = updatedValue;
+    const updatedForm = updateObject(this.state.orderForm, {
+      [inputID]: updatedValue
+    });
 
     let formIsValid = true;
     for (let inputID in updatedForm) {
@@ -163,7 +140,6 @@ class ContactData extends Component {
     const newOrderForm = [];
 
     for (let key in orderForm) {
-      // console.log(key);
       newOrderForm.push({
         id: key,
         config: this.state.orderForm[key]
